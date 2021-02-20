@@ -19,5 +19,15 @@ const signupValidator=function(data){
     return schema.validate(data).error
 }
 
+const createRoomvalidator=function(data){
+    const schema=Joi.object({
+        roomName: Joi.string().required().min(1).max(15),
+        username: Joi.string().required(),
+    })
+
+    return schema.validate(data).error
+}
+
 module.exports.loginValidator=loginValidator
 module.exports.signupValidator=signupValidator
+module.exports.createRoomvalidator=createRoomvalidator

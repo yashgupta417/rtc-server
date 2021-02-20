@@ -6,8 +6,8 @@ const userSchema=new mongoose.Schema({
     username: String,
     password: String,
     email: String,
-    // rooms: {type: mongoose.Schema.Types.ObjectId, 
-    //         ref:'Room'},
+    rooms: [{type: mongoose.Schema.Types.ObjectId, ref:'Room'}],
+    createdAt: {type: Number,default: Date.now},
 })
 
 

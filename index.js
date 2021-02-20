@@ -2,7 +2,6 @@ const express=require("express")
 const app=express()
 const mongoose=require("mongoose")
 const bodyParser=require("body-parser")
-const seedDB=require("./seed")
 
 
 //Configuring dotenv
@@ -17,15 +16,14 @@ app.use(bodyParser.urlencoded({extended:true}))
 //connecting to DB
 mongoose.connect("mongodb://localhost:27017/rtc-db",{useNewUrlParser: true, useUnifiedTopology:true},()=>{
     console.log("DB connected.")
-
-    //resetting dataset
-    //seedDB()
 })
 const authRoutes=require("./routes/auth")
 const userRoutes=require("./routes/user")
+const roomRoutes=require("./routes/room")
 
 app.use(authRoutes)
 app.use(userRoutes)
+app.use(roomRoutes)
 
 app.get("/",function(req,res){
     res.send("RTC")
