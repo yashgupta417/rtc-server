@@ -14,7 +14,8 @@ app.use(bodyParser.urlencoded({extended:true}))
 
 
 //connecting to DB
-mongoose.connect("mongodb://localhost:27017/rtc-db",{useNewUrlParser: true, useUnifiedTopology:true},()=>{
+const uri=process.env.DATABASE_URI || "mongodb://localhost:27017/rtc-db"
+mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true},()=>{
     console.log("DB connected.")
 })
 const authRoutes=require("./routes/auth")
