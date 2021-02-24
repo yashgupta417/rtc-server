@@ -4,7 +4,7 @@ const loginValidator=function(data){
     const schema=Joi.object({
         username: Joi.string().required(),
         password: Joi.string().required()
-    })
+    }).options({allowUnknown:true})
 
     return schema.validate(data).error
 }
@@ -14,7 +14,7 @@ const signupValidator=function(data){
         username: Joi.string().required().min(3).max(20),
         password: Joi.string().required().min(8).max(20),
         email: Joi.string().required().email(),
-    })
+    }).options({allowUnknown:true})
 
     return schema.validate(data).error
 }
