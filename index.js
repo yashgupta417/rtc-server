@@ -33,6 +33,9 @@ app.get("*",function(req,res){
     res.status(404).send("Not Found")
 })
 
-app.listen(3000,function(){
+//will use .env PORT during production and 3000 during development
+const port=process.env.PORT || 3000
+
+app.listen(port,function(){
     console.log("Server is running...")
 })
