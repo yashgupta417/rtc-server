@@ -17,7 +17,7 @@ router.post('/login',async function(req,res){
     if(!user) return res.status(400).send("Username doesn't exist.")
 
     //checking password is correct or not
-    const match=bcrypt.compare(user.password, loginDetails.password)
+    const match=bcrypt.compare(loginDetails.password, user.password)
     if (!match) return res.status(401).send("Invalid details.")
 
     //Assiging a token
