@@ -15,4 +15,21 @@ router.get("/user/:username",async function(req,res){
     res.send(user)
 })
 
+router.get("/user/:username/rooms",async function(req,res){
+    const user=await User.findOne({username:req.params.username})
+                        .populate({
+                            path:'rooms',
+                            populate:[{
+                                path:'owner'
+                            },
+                            {
+                                path:'members'
+                            }]
+                        })
+                        .exec()
+    if(!user) return res.status(400).send("User doesn't exsit")
+    console.log(user)
+    res.send(user.rooms)
+})
+
 module.exports=router
