@@ -38,7 +38,7 @@ router.post("/createRoom",async function(req,res){
     })
 })
 
-router.get("/joinRoom/",async function(req,res){
+router.get("/joinRoom",async function(req,res){
     //Finding room and the user
     let room=await Room.findOne({address:req.query.address}).exec()
     let user=await User.findOne({username: req.query.username}).exec()
