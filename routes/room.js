@@ -16,6 +16,9 @@ router.post("/createRoom",async function(req,res){
     //finding user
     const user=await User.findOne({username: req.body.username}).exec()
 
+    //checking user exists
+    if(!user) return res.status(400).send("Username doesn't exist.")
+
     //creating new Room
     let newRoom=await Room.create({address: address,
                                     name: req.body.roomName,
@@ -27,7 +30,12 @@ router.post("/createRoom",async function(req,res){
     await user.save()
                      
     //sending back response
-    res.send(newRoom)
+    res.send({
+        address:newRoom.address,
+        name: newRoom.name,
+        membersCount: newRoom.membersCount,
+        createdAt: newRoom.createdAt,
+    })
 })
 
 router.get("/joinRoom/",async function(req,res){
@@ -40,7 +48,7 @@ router.get("/joinRoom/",async function(req,res){
 
     //checking if user is already a member of the room
     const alreayJoined=room.members.find(member=>member.equals(user._id))
-    if(alreayJoined) return res.send("Already a member of the room.")
+    if(alreayJoined) return res.status(400).send("Already a member of the room.")
 
 
     //adding user to the room
@@ -51,12 +59,23 @@ router.get("/joinRoom/",async function(req,res){
     user.rooms.push(room._id)
     await user.save()
 
-    res.send("Joined Room Successfully")
+    //sending back response
+    res.send({
+        address:room.address,
+        name: room.name,
+        membersCount: room.membersCount,
+        createdAt: room.createdAt,
+    })
 
 })
 
 router.get("/room/:address",async function(req,res){
-    const room=await Room.findOne({address: req.params.address}).exec()
+    const room=await Room.findOne({address: req.params.address})
+                            .select('-_id name address members owner createdAt')
+                            .populate('members','-_id name username email createdAt roomsCount')
+                            .populate('owner','-_id name username email createdAt roomsCount')
+                            .exec()
+
     if (!room) return res.status(400).send("Room doesn't exist")
 
     res.send(room)

@@ -54,8 +54,15 @@ router.post('/signup',async function(req,res){
     })
     await newUser.save()
 
+
     //sending response
-    res.json(newUser)
+    res.send({
+        name: newUser.name,
+        username: newUser.username,
+        email: newUser.email,
+        createdAt: newUser.createdAt,
+        roomsCount: newUser.roomsCount,
+    })
 })
 
 module.exports=router
