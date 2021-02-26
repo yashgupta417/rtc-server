@@ -47,6 +47,7 @@ router.post('/signup',async function(req,res){
 
     //registering user
     let newUser=new User({
+        name: req.body.name,
         username: req.body.username,
         email: req.body.email,
         password: hashedPassword,
