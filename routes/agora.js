@@ -19,10 +19,14 @@ router.get('/agora/token',async function(req,res){
     if(!roomName || !username) return res.status(400).send("roomName and username required")
 
     const user=await User.findOne({username:username})
-                            .select('-_id name username email createdAt roomsCount')
+                            .select('-_id name username')
                             .exec()
 
-    const userString=JSON.stringify(user)
+    let userString=JSON.stringify(user)
+
+    //replacing " since they are not allowed in agora, replace them back on client side
+    userString=userString.replace(/\"/g,"#")
+
     const token=RtcTokenBuilder.buildTokenWithAccount(appID, appCertificate, roomName, userString, role, expirationTimeInSeconds)
 
     res.send({token: token, userString: userString})
