@@ -3,6 +3,8 @@ const app=express()
 const mongoose=require("mongoose")
 const bodyParser=require("body-parser")
 
+const path=require('path')
+app.use(express.static(path.join(__dirname, 'public')))
 
 //Configuring dotenv
 require('dotenv').config()
@@ -39,6 +41,10 @@ app.get("/",function(req,res){
 app.get("*",function(req,res){
     res.status(404).send("Not Found")
 })
+
+
+
+
 
 //will use .env PORT during production and 3000 during development
 const port=process.env.PORT || 3000
