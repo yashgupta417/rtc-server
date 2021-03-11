@@ -60,6 +60,7 @@ router.post('/signup',async function(req,res){
         name: newUser.name,
         username: newUser.username,
         email: newUser.email,
+        image: newUser.image,
         createdAt: newUser.createdAt,
         roomsCount: newUser.roomsCount,
     })

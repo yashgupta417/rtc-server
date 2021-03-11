@@ -33,6 +33,7 @@ router.post("/createRoom",async function(req,res){
     res.send({
         address:newRoom.address,
         name: newRoom.name,
+        image: newRoom.image,
         membersCount: newRoom.membersCount,
         createdAt: newRoom.createdAt,
     })
@@ -63,6 +64,7 @@ router.get("/joinRoom",async function(req,res){
     res.send({
         address:room.address,
         name: room.name,
+        image: room.image,
         membersCount: room.membersCount,
         createdAt: room.createdAt,
     })
@@ -71,14 +73,35 @@ router.get("/joinRoom",async function(req,res){
 
 router.get("/room/:address",async function(req,res){
     const room=await Room.findOne({address: req.params.address})
-                            .select('-_id name address members owner createdAt')
-                            .populate('members','-_id name username email createdAt roomsCount')
-                            .populate('owner','-_id name username email createdAt roomsCount')
+                            .select('-_id name address image members owner createdAt')
+                            .populate('members','-_id name username image email createdAt roomsCount')
+                            .populate('owner','-_id name username image email createdAt roomsCount')
                             .exec()
 
     if (!room) return res.status(400).send("Room doesn't exist")
 
     res.send(room)
+})
+
+
+//route to update name, image of room
+router.patch("/room/:address",async function(req,res){
+    const address=req.params.address
+    const updates=req.body
+    
+    //update the user
+    const room=await Room.findOneAndUpdate({address:address},{$set: updates},{new:true}).exec()
+
+    //update unsuccessfull
+    if(!room) return res.status(400).send("update unsucessfull")
+
+    res.send({
+        name: room.name,
+        address: room.address,
+        image: room.image,
+        membersCount: room.membersCount,
+        createdAt: room.createdAt,
+    })
 })
 
 module.exports=router

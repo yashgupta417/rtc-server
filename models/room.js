@@ -3,6 +3,7 @@ const mongoose=require("mongoose")
 const roomSchema=mongoose.Schema({
     name: String,
     address: String,
+    image: String,
     members: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
     membersCount: Number,
     owner: {type: mongoose.Schema.Types.ObjectId, ref: "User"},

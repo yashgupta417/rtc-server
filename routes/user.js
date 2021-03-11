@@ -12,7 +12,7 @@ router.get("/allUsers",async function(req,res){
 
 router.get("/user/:username",async function(req,res){
     const user=await User.findOne({username: req.params.username})
-                            .select('-_id name username email createdAt roomsCount')
+                            .select('-_id name username email image createdAt roomsCount')
                             .exec()
     if(!user) return res.status(400).send("User doesn't exist")
 
@@ -23,7 +23,7 @@ router.get("/user/:username/rooms",async function(req,res){
     const user=await User.findOne({username:req.params.username})
                         .populate({
                             path:'rooms',
-                            select:'-_id name address createdAt membersCount',
+                            select:'-_id name address image createdAt membersCount',
                             // populate:[{
                             //     path:'owner',
                             //     select:' ',
@@ -54,6 +54,7 @@ router.patch("/user/:username",async function(req,res){
         name: user.name,
         username: user.username,
         email: user.email,
+        image: user.image,
         createdAt: user.createdAt,
         roomsCount: user.roomsCount,
     })
