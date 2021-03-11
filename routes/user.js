@@ -39,6 +39,9 @@ router.get("/user/:username/rooms",async function(req,res){
     res.send(user.rooms)
 })
 
+
+
+
 router.patch("/user/:username",async function(req,res){
     const username=req.params.username
     const updates=req.body
@@ -59,5 +62,34 @@ router.patch("/user/:username",async function(req,res){
         roomsCount: user.roomsCount,
     })
 })
+
+const upload=require("../upload")
+
+router.patch('/user/:username/image',upload.single('image'),async function(req,res){
+    const file=req.file
+  
+    //if upload unsuccessfull
+    if(!file) return res.status(400).send("File not uploaded")
+  
+    const username=req.params.username
+    
+    //update the user
+    const user=await User.findOneAndUpdate({username:username},{$set: {image: file.location}},{new:true}).exec()
+
+    //update unsuccessfull
+    if(!user) return res.status(400).send("update unsucessfull")
+    
+    //send back response
+    res.send({
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        image: user.image,
+        createdAt: user.createdAt,
+        roomsCount: user.roomsCount,
+    })
+})
+  
+  
 
 module.exports=router

@@ -124,7 +124,7 @@ router.patch("/room/:address",async function(req,res){
     const address=req.params.address
     const updates=req.body
     
-    //update the user
+    //update the room
     const room=await Room.findOneAndUpdate({address:address},{$set: updates},{new:true}).exec()
 
     //update unsuccessfull
@@ -139,7 +139,30 @@ router.patch("/room/:address",async function(req,res){
     })
 })
 
+const upload=require("../upload")
 
+router.patch("/room/:address/image",upload.single('image'),async function(req,res){
+    const file=req.file
+
+    //if upload unsuccessfull
+    if(!file) return res.status(400).send("File not uploaded")
+
+    const address=req.params.address
+    
+    //update the room
+    const room=await Room.findOneAndUpdate({address:address},{$set: {image: file.location}},{new:true}).exec()
+
+    //update unsuccessfull
+    if(!room) return res.status(400).send("update unsucessfull")
+
+    res.send({
+        name: room.name,
+        address: room.address,
+        image: room.image,
+        membersCount: room.membersCount,
+        createdAt: room.createdAt,
+    })
+})
 
 
 module.exports=router
