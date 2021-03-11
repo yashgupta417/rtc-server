@@ -50,6 +50,7 @@ router.post('/signup',async function(req,res){
         name: req.body.name,
         username: req.body.username,
         email: req.body.email,
+        image: null,
         password: hashedPassword,
     })
     await newUser.save()

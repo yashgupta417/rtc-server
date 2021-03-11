@@ -4,6 +4,7 @@ const User=require("../models/user")
 const router=express.Router()
 const {createRoomvalidator}=require("../validation")
 const {generateRoomAddress}=require("../utils")
+const room = require('../models/room')
 
 router.post("/createRoom",async function(req,res){
     //validating data
@@ -23,10 +24,12 @@ router.post("/createRoom",async function(req,res){
     let newRoom=await Room.create({address: address,
                                     name: req.body.roomName,
                                     owner: user._id,
+                                    image: null,
                                     members: [user._id]})
 
     //adding room refernce to the current user
     user.rooms.push(newRoom._id)
+    
     await user.save()
                      
     //sending back response
@@ -103,5 +106,8 @@ router.patch("/room/:address",async function(req,res){
         createdAt: room.createdAt,
     })
 })
+
+
+
 
 module.exports=router
