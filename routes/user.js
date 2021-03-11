@@ -39,4 +39,24 @@ router.get("/user/:username/rooms",async function(req,res){
     res.send(user.rooms)
 })
 
+router.patch("/user/:username",async function(req,res){
+    const username=req.params.username
+    const updates=req.body
+    
+    //update the user
+    const user=await User.findOneAndUpdate({username:username},{$set: updates},{new:true}).exec()
+
+    //update unsuccessfull
+    if(!user) return res.status(400).send("update unsucessfull")
+    
+    //send back response
+    res.send({
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        createdAt: user.createdAt,
+        roomsCount: user.roomsCount,
+    })
+})
+
 module.exports=router
