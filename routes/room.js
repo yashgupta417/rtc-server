@@ -74,6 +74,38 @@ router.get("/joinRoom",async function(req,res){
 
 })
 
+router.get("/leaveRoom",async function(req,res){
+    //Finding room and the user
+    let room=await Room.findOne({address:req.query.address}).exec()
+    let user=await User.findOne({username: req.query.username}).exec()
+
+    //handling Bad request
+    if(!room || !user) return res.sendStatus(400)
+
+    //checking if user is already a member of the room
+    const isMember=room.members.find(member=>member.equals(user._id))
+    if(!isMember) return res.status(400).send("Not a member of the room.")
+
+
+    //removing user from the room
+    room.members=room.members.filter(member=>!member.equals(user._id))
+    await room.save()
+
+    //removing room refernce from the user
+    user.rooms=user.rooms.filter(r=>!r.equals(room._id))
+    await user.save()
+
+    //sending back response
+    res.send({
+        address:room.address,
+        name: room.name,
+        image: room.image,
+        membersCount: room.membersCount,
+        createdAt: room.createdAt,
+    })
+
+})
+
 router.get("/room/:address",async function(req,res){
     const room=await Room.findOne({address: req.params.address})
                             .select('-_id name address image members owner createdAt')
