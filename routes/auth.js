@@ -57,14 +57,7 @@ router.post('/signup',async function(req,res){
 
 
     //sending response
-    res.send({
-        name: newUser.name,
-        username: newUser.username,
-        email: newUser.email,
-        image: newUser.image,
-        createdAt: newUser.createdAt,
-        roomsCount: newUser.roomsCount,
-    })
+    res.send("user signed up successfully.")
 })
 
 module.exports=router
