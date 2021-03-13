@@ -31,15 +31,15 @@ router.post('/signup',async function(req,res){
 
     //validating user data
     const error=signupValidator(req.body)
-    if(error) return res.status(400).send({message: error.details[0].message})
+    if(error) return res.status(400).send(error.details[0].message)
 
     //checking if username already taken
     let usernameExist=await User.findOne({username: req.body.username}).exec()
-    if(usernameExist) return res.status(400).send({message: "Username not available"})
+    if(usernameExist) return res.status(400).send("Username not available")
 
     //checking if email already registered
     let emailExist=await User.findOne({email:req.body.email}).exec()
-    if(emailExist) return res.status(400).send({message: "Account already exist with the given email"})
+    if(emailExist) return res.status(400).send("Account already exist with the given email")
 
     //hashing  password
     const salt=await bcrypt.genSalt(10)
@@ -57,7 +57,7 @@ router.post('/signup',async function(req,res){
 
 
     //sending response
-    res.send({message: "user signed up successfully."})
+    res.send("user signed up successfully.")
 })
 
 module.exports=router
