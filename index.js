@@ -1,5 +1,7 @@
 const express=require("express")
 const app=express()
+const httpServer=require("http").createServer(app)
+const io=require("socket.io")(httpServer)
 const mongoose=require("mongoose")
 const bodyParser=require("body-parser")
 
@@ -24,6 +26,7 @@ const authRoutes=require("./routes/auth")
 const userRoutes=require("./routes/user")
 const roomRoutes=require("./routes/room")
 const agoraRoutes=require("./routes/agora")
+const { join } = require("path")
 
 
 app.use(authRoutes)
@@ -41,12 +44,21 @@ app.get("*",function(req,res){
 })
 
 
+const {joinRoom, sendMessage}=require("./eventHandlers/chat")(io)
 
+//socket
+io.on("connection",(socket)=>{
 
+    socket.on("joinRoom",joinRoom)
+    socket.on("sendMessage",sendMessage)
+    
+})
 
 //will use .env PORT during production and 3000 during development
 const port=process.env.PORT || 3000
 
-app.listen(port,function(){
+
+httpServer.listen(port,function(){
     console.log("Server is running...")
 })
+//app.listen() is replaces with httpServer.listen()

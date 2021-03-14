@@ -8,6 +8,7 @@ const roomSchema=mongoose.Schema({
     membersCount: Number,
     owner: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
     createdAt: {type: Number,default: Date.now},
+    messages: [{type: mongoose.Schema.Types.ObjectId, ref: "Message"}]
 },{
     toObject: { virtuals: true },
     toJSON: { virtuals: true },
