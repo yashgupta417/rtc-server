@@ -1,5 +1,6 @@
 const Room=require("../models/room")
 const Message=require("../models/message")
+const User=require("../models/user")
 
 module.exports=(io)=>{
     const joinRoom=async function(address,cb){
@@ -16,13 +17,24 @@ module.exports=(io)=>{
                                 .exec()
 
         //trigger callback
-        cb({messages})
+        cb(messages)
     }
 
-    const sendMessage=function(address, msg){
+    const sendMessage=async function(text, username, address,cb){
         const socket=this
         
+        const sender=await User.findOne({username:username}).exec()
+        const to=await Room.findOne({address:address}).exec()
+
+        let message=new Message({
+            text:text,
+            sender: sender._id,
+            to: to._id,
+        })
+        await message.save()
         socket.to(address).broadcast.emit('receiveMessage',msg)
+
+        cb({status: "sent"})
     }
 
     return {
