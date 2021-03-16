@@ -32,7 +32,7 @@ module.exports=(io)=>{
             to: to._id,
         })
         await message.save()
-        socket.to(address).emit('receiveMessage',msg)
+        socket.to(address).emit('receiveMessage',message)
 
         cb({status: "sent"})
     }
