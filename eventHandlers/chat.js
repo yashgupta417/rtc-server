@@ -12,7 +12,7 @@ module.exports=(io)=>{
 
         //get all messages
         const room=await Room.findOne({address:address}).exec()
-        const messages=Message.find({to:room._id})
+        const messages=await Message.find({to:room._id})
                                 .populate('sender','-_id name username image email createdAt roomsCount')
                                 .exec()
 
