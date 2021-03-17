@@ -26,12 +26,16 @@ module.exports=(io)=>{
         const sender=await User.findOne({username:username}).exec()
         const to=await Room.findOne({address:address}).exec()
 
-        let message=new Message({
+        let message=await Message.create({
             text:text,
             sender: sender._id,
             to: to._id,
         })
-        await message.save()
+
+        message=await Message.findOne(message)
+                .populate('sender','-_id name username image email createdAt roomsCount')
+                .exec()
+  
         socket.to(address).emit('receiveMessage',message)
 
         cb({status: "sent"})
