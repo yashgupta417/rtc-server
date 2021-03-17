@@ -31,7 +31,7 @@ module.exports=(io)=>{
             sender: sender._id,
             to: to._id,
         })
-
+        console.log(message.text)
         message=await Message.findOne(message)
                 .populate('sender','-_id name username image email createdAt roomsCount')
                 .exec()
