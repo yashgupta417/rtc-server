@@ -28,7 +28,7 @@ router.get('/agora/token',async function(req,res){
     userString=userString.replace(/\"/g,"#")
 
     //replacing '/'
-    userString=userString.replace(/\//g,"|")
+    userString=userString.replace(/\//g,";")
 
     const token=RtcTokenBuilder.buildTokenWithAccount(appID, appCertificate, roomName, userString, role, expirationTimeInSeconds)
 
