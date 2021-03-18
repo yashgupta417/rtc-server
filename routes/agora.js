@@ -27,6 +27,9 @@ router.get('/agora/token',async function(req,res){
     //replacing " since they are not allowed in agora, replace them back on client side
     userString=userString.replace(/\"/g,"#")
 
+    //replacing '/'
+    userString=userString.replace(/\//g,"|")
+
     const token=RtcTokenBuilder.buildTokenWithAccount(appID, appCertificate, roomName, userString, role, expirationTimeInSeconds)
 
     res.send({token: token, userString: userString})
