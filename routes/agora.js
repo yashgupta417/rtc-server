@@ -19,7 +19,7 @@ router.get('/agora/token',async function(req,res){
     if(!roomName || !username) return res.status(400).send("roomName and username required")
 
     const user=await User.findOne({username:username})
-                            .select('-_id name username')
+                            .select('-_id name username image')
                             .exec()
 
     let userString=JSON.stringify(user)
