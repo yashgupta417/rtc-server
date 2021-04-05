@@ -25,14 +25,12 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true},()=>{
 const authRoutes=require("./routes/auth")
 const userRoutes=require("./routes/user")
 const roomRoutes=require("./routes/room")
-const agoraRoutes=require("./routes/agora")
 const { join } = require("path")
 
 
 app.use(authRoutes)
 app.use(userRoutes)
 app.use(roomRoutes)
-app.use(agoraRoutes)
 
 
 app.get("/",function(req,res){
