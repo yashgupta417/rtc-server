@@ -46,7 +46,7 @@ module.exports=(io)=>{
                                 .exec()
 
         //generate room token
-        userString,token=await generateRoomToken(username,room.name)
+        const userString,token=await generateRoomToken(username,room.name)
 
         //trigger callback
         cb(messages,room,token,userString)
