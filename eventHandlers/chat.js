@@ -1,7 +1,15 @@
 const Room=require("../models/room")
 const Message=require("../models/message")
 const User=require("../models/user")
+const {RtcTokenBuilder, RtmTokenBuilder, RtcRole, RtmRole} = require('agora-access-token')
 
+const appID=process.env.AGORA_APP_ID
+const appCertificate=process.env.AGORA_APP_CERTIFICATE
+const role=RtcRole.PUBLISHER
+
+
+//valid for a day
+const expirationTimeInSeconds=3600*24 + Math.floor(Date.now()/1000)
 
 async function getRoom(address) {
     const room=await Room.findOne({address:address})
@@ -12,6 +20,7 @@ async function getRoom(address) {
 
     return room
 }
+
 
 async function generateRoomToken(username,roomName) {
     const user=await User.findOne({username:username})
