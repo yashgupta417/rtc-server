@@ -28,7 +28,7 @@ async function generateRoomToken(username,roomName) {
 
     const token=RtcTokenBuilder.buildTokenWithAccount(appID, appCertificate, roomName, userString, role, expirationTimeInSeconds)
 
-    return userString,token
+    return {userString,token}
 }
 
 module.exports=(io)=>{
@@ -46,7 +46,7 @@ module.exports=(io)=>{
                                 .exec()
 
         //generate room token
-        const userString,token=await generateRoomToken(username,room.name)
+        const {userString,token}=await generateRoomToken(username,room.name)
 
         //trigger callback
         cb(messages,room,token,userString)
