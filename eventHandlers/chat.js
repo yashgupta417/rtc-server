@@ -13,7 +13,7 @@ const expirationTimeInSeconds=3600*24 + Math.floor(Date.now()/1000)
 
 async function getRoom(address) {
     const room=await Room.findOne({address:address})
-                            .select('-_id name address image members owner createdAt')
+                            .select('_id name address image members owner createdAt')
                             .populate('members','-_id name username image email createdAt roomsCount')
                             .populate('owner','-_id name username image email createdAt roomsCount')
                             .exec()
