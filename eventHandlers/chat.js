@@ -48,7 +48,7 @@ module.exports=(io)=>{
             sender: sender._id,
             to: to._id,
         })
-        
+
         console.log(message.text);
         console.log(localId);
 
@@ -58,7 +58,7 @@ module.exports=(io)=>{
   
         socket.to(address).emit('receiveMessage',message)
 
-        cb({status: "sent", localId: localId})
+        cb({status: "sent"})
     }
 
     return {
