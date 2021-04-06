@@ -48,7 +48,7 @@ router.get("/joinRoom",async function(req,res){
     let user=await User.findOne({username: req.query.username}).exec()
 
     //handling Bad request
-    if(!room || !user) return res.sendStatus(400)
+    if(!room || !user) return res.sendStatus(400).send("Room not found.")
 
     //checking if user is already a member of the room
     const alreayJoined=room.members.find(member=>member.equals(user._id))
