@@ -37,7 +37,7 @@ module.exports=(io)=>{
         cb(messages,room,token,userString)
     }
 
-    const sendMessage=async function(text, username, address,cb){
+    const sendMessage=async function(text, username, address,cb,localId=""){
         const socket=this
         
         const sender=await User.findOne({username:username}).exec()
@@ -55,7 +55,7 @@ module.exports=(io)=>{
   
         socket.to(address).emit('receiveMessage',message)
 
-        cb({status: "sent"})
+        cb({status: "sent", localId: localId})
     }
 
     return {
