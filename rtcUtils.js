@@ -1,5 +1,6 @@
 const {RtcTokenBuilder, RtmTokenBuilder, RtcRole, RtmRole} = require('agora-access-token')
 const User=require("./models/user")
+const Room=require("./models/room")
 
 const appID=process.env.AGORA_APP_ID
 const appCertificate=process.env.AGORA_APP_CERTIFICATE
@@ -11,7 +12,7 @@ const expirationTimeInSeconds=3600*24 + Math.floor(Date.now()/1000)
 
 
 
-async function generateRoomToken(username,roomName) {
+async function generateRoomToken(username,roomAddress) {
     const user=await User.findOne({username:username})
                             .select('-_id name username image')
                             .exec()
@@ -24,9 +25,21 @@ async function generateRoomToken(username,roomName) {
     //replacing '/'
     userString=userString.replace(/\//g,";")
 
-    const token=RtcTokenBuilder.buildTokenWithAccount(appID, appCertificate, roomName, userString, role, expirationTimeInSeconds)
+    const token=RtcTokenBuilder.buildTokenWithAccount(appID, appCertificate, roomAddress, userString, role, expirationTimeInSeconds)
 
     return {userString,token}
 }
 
-module.exports={generateRoomToken}
+
+async function getRoom(address) {
+    const room=await Room.findOne({address:address})
+                            .select('_id name address image members owner createdAt')
+                            .populate('members','-_id name username image email createdAt roomsCount')
+                            .populate('owner','-_id name username image email createdAt roomsCount')
+                            .exec()
+
+    return room
+}
+
+
+module.exports={generateRoomToken, getRoom}

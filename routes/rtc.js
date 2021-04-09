@@ -1,16 +1,20 @@
 const express=require('express')
 const router=express.Router()
 const {RtcTokenBuilder, RtmTokenBuilder, RtcRole, RtmRole} = require('agora-access-token')
-const {generateRoomToken}=require("../rtcUtils")
+const {generateRoomToken, getRoom}=require("../rtcUtils")
 
 
-router.get('/agora/token',async function(req,res){
-    let {roomName, username}=req.query
+router.get('/rtc/token',async function(req,res){
+    let {roomAddress, username}=req.query
 
-    if(!roomName || !username) return res.status(400).send("roomName and username required")
+    if(!roomAddress || !username) return res.status(400).send("roomAddress and username required")
+
+    
+    const room=await getRoom(roomAddress)
+    if(!room) return res.status(400).send("invalid address")
 
     //generate room token
-    const {userString,token}=await generateRoomToken(username,roomName)
+    const {userString,token}=await generateRoomToken(username,roomAddress)
 
     res.send({token: token, userString: userString})
 })

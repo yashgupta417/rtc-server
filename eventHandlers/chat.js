@@ -1,19 +1,7 @@
 const Room=require("../models/room")
 const Message=require("../models/message")
 const User=require("../models/user")
-const {generateRoomToken}=require("../rtcUtils")
-
-
-async function getRoom(address) {
-    const room=await Room.findOne({address:address})
-                            .select('_id name address image members owner createdAt')
-                            .populate('members','-_id name username image email createdAt roomsCount')
-                            .populate('owner','-_id name username image email createdAt roomsCount')
-                            .exec()
-
-    return room
-}
-
+const {generateRoomToken, getRoom}=require("../rtcUtils")
 
 
 module.exports=(io)=>{
@@ -31,7 +19,7 @@ module.exports=(io)=>{
                                 .exec()
 
         //generate room token
-        const {userString,token}=await generateRoomToken(username,room.name)
+        const {userString,token}=await generateRoomToken(username,address)
 
         //trigger callback
         cb(messages,room,token,userString)
