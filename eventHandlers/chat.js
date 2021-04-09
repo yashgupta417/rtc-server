@@ -14,6 +14,10 @@ module.exports=(io)=>{
 
         //get all messages
         const room=await getRoom(address)
+
+        //debug
+        console.log(room)
+
         const messages=await Message.find({to:room._id})
                                 .populate('sender','-_id name username image email createdAt roomsCount')
                                 .exec()
