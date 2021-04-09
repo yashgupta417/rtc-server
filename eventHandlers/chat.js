@@ -25,6 +25,10 @@ module.exports=(io)=>{
         //generate room token
         const {userString,token}=await generateRoomToken(username,address)
 
+        //debug
+        console.log(userString)
+        console.log(token)
+
         //trigger callback
         cb(messages,room,token,userString)
     }
