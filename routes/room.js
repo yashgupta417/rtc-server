@@ -80,7 +80,7 @@ router.get("/leaveRoom",async function(req,res){
     let user=await User.findOne({username: req.query.username}).exec()
 
     //handling Bad request
-    if(!room || !user) return res.sendStatus(400)
+    if(!room || !user) return res.status(400).send("Room/User not found")
 
     //checking if user is already a member of the room
     const isMember=room.members.find(member=>member.equals(user._id))
@@ -96,13 +96,7 @@ router.get("/leaveRoom",async function(req,res){
     await user.save()
 
     //sending back response
-    res.send({
-        address:room.address,
-        name: room.name,
-        image: room.image,
-        membersCount: room.membersCount,
-        createdAt: room.createdAt,
-    })
+    res.status(200)
 
 })
 
