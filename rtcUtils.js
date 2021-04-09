@@ -25,6 +25,8 @@ async function generateRoomToken(username,roomAddress) {
     //replacing '/'
     userString=userString.replace(/\//g,";")
 
+    console.log("generateRoomToken: ${roomAddress}")
+
     const token=RtcTokenBuilder.buildTokenWithAccount(appID, appCertificate, roomAddress, userString, role, expirationTimeInSeconds)
 
     return {userString,token}
