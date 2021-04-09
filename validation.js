@@ -22,7 +22,7 @@ const signupValidator=function(data){
 
 const createRoomvalidator=function(data){
     const schema=Joi.object({
-        roomName: Joi.string().required().min(1).max(15),
+        roomName: Joi.string().required().trim().min(1).max(15),
         username: Joi.string().required(),
     })
 
